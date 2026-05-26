@@ -1,66 +1,44 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import './style.css'
+import { data } from 'react-router-dom'
+import { getCharacters } from '../../api/rickAndMorty'
+import Card from '../../components/Card'
 
 function Home() {
+    // LOADING  - existe quando requisita algo para algo externo
+    const [carregando, setCarregando] = useState(true)
+    const [personagens, setPersonagens] = useState([])
 
-    const [num1, setNum1] = useState()
-    const [num2, setNum2] = useState()
-    const [resultado, setResultado] = useState()
+    useEffect(() => {
+       async function carregar() {
+            const dados = await getCharacters()
+            setPersonagens(dados)
+            setCarregando(false)
+        }
 
-    function somar() {
+        // variavel = [ ] espaço da memória
+        // array    = [   |   |   ] uma variavel com vários espaços dividido da memória
+        //              0 | 1 | 2
 
-        setResultado(Number(num1) + Number(num2))
+        carregar()
+    }, [])
 
-    }
-
-    function subtrair() {
-
-        setResultado(Number(num1) - Number(num2))
-
-    }
-
-    function multiplicar() {
-
-        setResultado(Number(num1) * Number(num2))
-
-    }
-
-    function dividir() {
-
-        setResultado(Number(num1) / Number(num2))
-
+    if (carregando) {
+        return (
+            <> CARREGANDO ... </>
+        )
     }
 
     return (
-        <>
+        <div className='home page'>
+            <h3 className='titulo-lista'>Personagens - Rick And Morty</h3>
 
-            <br />
-            <label>Digite um número</label>
-            <input
-                type="number"
-                value={num1}
-                onChange={(e) => setNum1(e.target.value)}
-            />
-
-            <label>Digite outro número</label>
-            <input
-                type="number"
-                value={num2}
-                onChange={(e) => setNum2(e.target.value)}
-            />
-
-            <br />
-            <button onClick={somar}>Somar</button>
-            <br />
-            <button onClick={subtrair}>Subtrair</button>
-            <br />
-            <button onClick={multiplicar}>Multiplicar</button>
-            <br />
-            <button onClick={dividir}>Dividir</button>
-
-            <p>{resultado}</p>
-
-        </>
+            <div className='lista-personagens'>
+                {personagens.map((personagem) => (
+                    <Card personagem={personagem} />
+                ))}
+            </div>
+        </div>
     )
 }
 export default Home

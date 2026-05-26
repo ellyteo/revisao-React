@@ -13,10 +13,10 @@ function Header() {
                 <Link to='/'>
                     <button>Home</button>
                 </Link>
-
+                <br />
                 <br />
                 <Link to='/about'>
-                <button>Sobre</button>
+                    <button>Sobre</button>
                 </Link>
 
             </header>
